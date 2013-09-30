@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="../../testwebsite/js/threejs/build/three.js"></script> <!-- Please remember to substitute with the path to your local three.js library-->
+		<script src="../../testwebsite/js/threejs/examples/js/controls/TrackballControls.js"></script> <!-- Please remember to substitute with the path to your local trackballcontrol.js library-->
+		<script>
+		var camera, scene, renderer, geometry, material, mesh, controls;
+		function webGLStart(){
+			var glcanvas = document.getElementById("glcanvas");// Get the canvas from html
+			init(glcanvas);// pass into a function that will initialize the renderer, scene and camera objects
+			renderer.render( scene, camera ); // Running the inbuilt three js render function with (now) initalized objects
+			animate();
+		}
+
+		var animate = function () {
+			requestAnimationFrame( animate );
+			renderer.render(scene, camera);
+			controls.update();
+		}
+
+		var init = function (glcanvas){
+			camera = new THREE.OrthographicCamera( 500 / - 2, 500 / 2, 500 / 2, 500 / - 2, 100, 1000 ); // Initialize the global camera variable using the three.js libraries
+			camera.position.z = 400; renderer = new THREE.CanvasRenderer();// Initialize the global renderer variable using the three.js libraries
+			renderer.setSize( 250, 150 ); // and establish the resolution that will show.
+			glcanvas.appendChild(renderer.domElement); // Add on to the glcanvas object (supplied via parameter) this newly defined renderer object
+			// set up the dimensions
+			geometry = new THREE.CubeGeometry(0,0,0); // Began by creating a core object that all the others will be merged on to. This is a style choice and not necessary. Also, this object will be created at the center of the scene.
+			letterH = getLetterH(0,0,0); // Got the letter H from a local function defined below
+			THREE.GeometryUtils.merge(geometry, letterH); // Merged on to the core object our letter H making the core object now H
+			letterU = getLetterU(70,0,0); // got the letter U from a local function defined below
+		    // Note: specified the coordinates to rise along the x-axis, so the letter U will appear to the left of the letter H
+			THREE.GeometryUtils.merge(geometry, letterU); // Merged on to the core object our letter U making the core object now HU
+			letterG = getLetterG(140,0,0);// got the letter G from a local function defined below
+			THREE.GeometryUtils.merge(geometry, letterG); // Merged on to the core object our letter G making the core object now HUG
+			letterE = getLetterE(210, 0, 0);// got the letter E from a local function defined below
+			THREE.GeometryUtils.merge(geometry, letterE);// Merged on to the core object our letter E making the core object now HUGE
+			geometry.applyMatrix( new THREE.Matrix4().makeTranslation(-100, 0, 0)); // As I didn't want the word to start from the center, I translated it to the left for readibility
+			material = new THREE.MeshBasicMaterial( { color: 0xEC008C, wireframe: true, wireframeLinewidth: 2 } ); // Created a basic mesh material using the three.js library, setting the color to pink, the wireframe on with a width of 2px
+			mesh = new THREE.Mesh(geometry, material); // Created the mesh using the three.js library and the material and dimensions defined.
+			controls = new THREE.TrackballControls(camera,glcanvas); //Using the Trackballs library and camera initialize the controls
+			controls.rotateSpeed = 2.0; // establish the details of the controls
+			controls.zoomSpeed = 1.2;
+			controls.panSpeed = 0.8;
+			controls.noZoom = false;
+			controls.noPan = false;
+			controls.staticMoving = true;
+			controls.dynamicDampingFactor = 0.3;
+			controls.keys = [ 65, 83, 68 ];
+			controls.addEventListener( 'change', render); // call the render function on a change event
+			scene = new THREE.Scene(); // Initialized the scene
+			scene.add( mesh ); // finished the creation of the scene by adding the mesh to it.
+		}
+		var getLetterE = function (x,y,z){
+			geometry2 = new THREE.CubeGeometry( 20, 100, 20 );
+			geometry2.applyMatrix( new THREE.Matrix4().makeTranslation( x+0, y-20, z+0) );
+			geometry3 = new THREE.CubeGeometry( 60, 20, 20 );
+			geometry3.applyMatrix( new THREE.Matrix4().makeTranslation( x+20, y-60, z+0) );
+			geometry4 = new THREE.CubeGeometry( 60, 20, 20 );
+			geometry4.applyMatrix( new THREE.Matrix4().makeTranslation( x+20, y+20, z+0) );
+			geometry5 = new THREE.CubeGeometry( 40, 20, 20 );
+			geometry5.applyMatrix( new THREE.Matrix4().makeTranslation( x+10, y-20, z+0) );
+
+			THREE.GeometryUtils.merge(geometry2, geometry3);
+			THREE.GeometryUtils.merge(geometry2, geometry4);
+			THREE.GeometryUtils.merge(geometry2, geometry5);
+			return geometry2;
+		}
+
+		var getLetterG = function (x,y,z){
+			geometry2 = new THREE.CubeGeometry( 20, 100, 20 );
+			geometry2.applyMatrix( new THREE.Matrix4().makeTranslation( x+0, y-20, z+0) );
+			geometry3 = new THREE.CubeGeometry( 60, 20, 20 );
+			geometry3.applyMatrix( new THREE.Matrix4().makeTranslation( x+20, y-60, z+0) );
+			geometry4 = new THREE.CubeGeometry( 60, 20, 20 );
+			geometry4.applyMatrix( new THREE.Matrix4().makeTranslation( x+20, y+20, z+0) );
+			geometry5 = new THREE.CubeGeometry( 20, 40, 20 );
+			geometry5.applyMatrix( new THREE.Matrix4().makeTranslation( x+40, y-50, z+0) );
+
+
+			THREE.GeometryUtils.merge(geometry2, geometry3);
+			THREE.GeometryUtils.merge(geometry2, geometry4);
+			THREE.GeometryUtils.merge(geometry2, geometry5);
+			return geometry2;
+		}
+
+		var getLetterH = function (x,y,z){
+			geo2 = new THREE.CubeGeometry(20,100,20); // created a cube
+			geo2.applyMatrix( new THREE.Matrix4().makeTranslation( x+0, y-20, z+0) ); // moved the cube into an appropriate position
+			geo3 = new THREE.CubeGeometry(20,100,20); // created another cube
+			geo3.applyMatrix( new THREE.Matrix4().makeTranslation( x+40, y-20, z+0) ); // moved the second cube into an appropriate position. Note that this is merely 40px right of the other one
+			geo4 = new THREE.CubeGeometry(60,20,20); // created the final cube
+			geo4.applyMatrix( new THREE.Matrix4().makeTranslation( x+20, y-20, z+0) ); // moved the third cube into an appropriate position.
+			THREE.GeometryUtils.merge(geo2, geo3); // merged the second and third geometries into the second one
+			THREE.GeometryUtils.merge(geo2, geo4); // merged the second (now including the third) and fourth geometries into the second one.
+			return geo2; // returned this completly formed letter back
+		}
+
+		var getLetterU = function (x,y,z){
+			geometry2 = new THREE.CubeGeometry( 20, 100, 20 );
+			geometry2.applyMatrix( new THREE.Matrix4().makeTranslation( x+0, y-20, z+0) );
+			geometry3 = new THREE.CubeGeometry( 20, 100, 20 );
+			geometry3.applyMatrix( new THREE.Matrix4().makeTranslation( x+40, y-20, z+0) );
+			geometry4 = new THREE.CubeGeometry( 60, 20, 20 );
+			geometry4.applyMatrix( new THREE.Matrix4().makeTranslation( x+20, y-60, z+0) );
+
+			THREE.GeometryUtils.merge(geometry2, geometry3);
+			THREE.GeometryUtils.merge(geometry2, geometry4);
+			return geometry2;
+		}
+
+		function render() { // function to call when the controls event is called
+			renderer.render( scene,camera ); // call the three.js renderer's render function with new scene and camera
+		} 
+		</script>
+		Example1
+	</head>
+    <body onload="webGLStart();">
+      <div id="glcanvas"></div>
+    </body>
+</html>
+
