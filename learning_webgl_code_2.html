@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<script src="../../testwebsite/js/threejs/build/three.js"></script> <!-- Please remember to substitute with the path to your local three.js library-->
-		<script src="../../testwebsite/js/threejs/examples/js/controls/TrackballControls.js"></script> <!-- Please remember to substitute with the path to your local trackballcontrol.js library-->
+		<script src="../../testwebsite/js/threejs/examples/js/controls/TrackballControls.js"></script> <!-- Please remember to substitute with the path to your local trackballscontrols.js library-->
 		<script>
 		var camera, scene, renderer, geometry, material, mesh, controls;
 		function webGLStart(){
@@ -14,7 +14,6 @@
 
 		var animate = function () {
 			requestAnimationFrame( animate );
-			renderer.render(scene, camera);
 			controls.update();
 		}
 
@@ -112,7 +111,7 @@
 			renderer.render( scene,camera ); // call the three.js renderer's render function with new scene and camera
 		} 
 		</script>
-		Example1
+		Example 2
 	</head>
     <body onload="webGLStart();">
       <div id="glcanvas"></div>
